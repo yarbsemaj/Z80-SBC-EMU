@@ -1,0 +1,14 @@
+@import "~bootswatch/dist/darkly/variables";
+@import "~bootstrap/scss/bootstrap";
+@import "~bootswatch/dist/darkly/bootswatch";
+
+html {
+    overflow-x: hidden;
+}
+
+#terminal-wrapper {
+    border: 10px black solid;
+    width: 820px;
+    height: 620px;
+    border-radius: 4px;
+}
