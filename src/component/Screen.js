@@ -1,3 +1,5 @@
+require('typeface-courier-prime')
+
 const black = "#000000";
 const red = "#800000";
 const green = "#008000";
@@ -192,7 +194,7 @@ Screen.prototype.draw = function () {
     this.canvas.fillStyle = black;
     this.canvas.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
 
-    this.canvas.font = "15px monospace";
+    this.canvas.font = "15px Courier Prime";
     let now = new Date();
     //First draw the background, we have to spit this out so we dont get overdraw
     for (var row = 0; row < this.height; row++) {

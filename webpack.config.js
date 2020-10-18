@@ -20,16 +20,12 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(cim|jpg|png)$/i,
+                test: /\.(cim|jpg|png|woff2|woff)$/i,
                 use: [
                     {
                         loader: 'file-loader',
                     },
                 ],
-            },
-            {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
             },
             {
                 test: /\.(sa|sc|c)ss$/,
