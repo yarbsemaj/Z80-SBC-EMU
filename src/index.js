@@ -115,6 +115,17 @@ function setupInterface() {
     });
 }
 
+function loadRomOnStartup() {
+    var romName = window.location.hash.substr(1);
+    let rom = roms.find((rom) => romName == rom.name);
+    if (rom) {
+        theComputer.mmap.addROM(rom.name, rom.start, rom.size, rom.uri);
+        theComputer.cpu.reset();
+        //Give time for the CPU to reset
+        setTimeout(() => { theComputer.addToKeyboardBuffer('E9000\n') }, 50);
+    }
+}
+
 /////////////////////////////////////////////////////////////////////
 
 var theComputer;
@@ -126,6 +137,7 @@ function startUpEmulation() {
     setInterval(() => screen.draw(), 32);
     theComputer = new ZCore(emuConfig);
     setupInterface();
+    loadRomOnStartup();
 }
 
 $(startUpEmulation());
