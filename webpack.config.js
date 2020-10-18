@@ -20,7 +20,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(cim|png)$/i,
+                test: /\.(cim|jpg|png)$/i,
                 use: [
                     {
                         loader: 'file-loader',

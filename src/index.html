@@ -4,12 +4,25 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Z80 SBC</title>
+    <meta name="description"
+        content="An emulator for my own RC2014 compatable Z80 based single board computer. Games included.">
+    <meta name="author" content="James Bray">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-180780532-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-180780532-2');
+    </script>
+
+    <title>Z80 SBC EMU</title>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="#">Z80 SBC</a>
+        <a class="navbar-brand" href="#">Z80 SBC EMU</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -23,13 +36,16 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#romModal">Load ROM</a>
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ihexModal" >Load iHex</a>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ihexModal">Load iHex</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#" id="reset">Reset</a>
                     </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-toggle="modal" data-target="#helpModal">Help</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#aboutModal">About</a>
                 </li>
             </ul>
         </div>
@@ -54,6 +70,8 @@
     <%= require('html-loader!./modal/rom.html') %>
     <!-- IHEX Modal -->
     <%= require('html-loader!./modal/ihex.html') %>
+    <!-- About Modal -->
+    <%= require('html-loader!./modal/about.html') %>
 </body>
 
 </html>
