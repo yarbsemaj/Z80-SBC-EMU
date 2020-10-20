@@ -17,6 +17,7 @@ module.exports = {
         compress: true,
         port: 9000
     },
+    entry: './src/index.ts',
     module: {
         rules: [
             {
@@ -35,8 +36,16 @@ module.exports = {
                     'postcss-loader',
                     'sass-loader',
                 ],
-            }
+            },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
         ],
+    },
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js']
     },
     plugins: [HTMLWebpackPluginConfig, new FaviconsWebpackPlugin(), new MiniCssExtractPlugin()]
 };

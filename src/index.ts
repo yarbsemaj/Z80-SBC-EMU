@@ -2,8 +2,8 @@ import 'bootstrap';
 import './main.scss';
 import $ from "jquery";
 
-import Screen from './component/Screen';
-import ZCore from './component/ZCore';
+import { Screen } from './component/Screen';
+import { ZCore } from './component/ZCore';
 
 import root from './roms/root.cim';
 
@@ -34,11 +34,11 @@ let roms = [
 ]
 
 /////////////////////////////////////////////////////////////////////
-function sendOutput(txt) {
+function sendOutput(txt: string) {
     screen.newChar(txt);
 }
 
-function inputCharacter(character) {
+function inputCharacter(character: string) {
     // character in from console interface
     theComputer.addToKeyboardBuffer(character);
     if (character.charCodeAt(0) == 10) {
@@ -47,7 +47,7 @@ function inputCharacter(character) {
 }
 
 function setupInterface() {
-    $('html').on('keypress', function (event) {
+    $('html').on('keypress', function (event: any) {
         if (event.which == 9 || event.which == 13 || event.which == 16) {
             event.preventDefault();
             if (event.which == 9) { inputCharacter('\t'); }
@@ -58,21 +58,21 @@ function setupInterface() {
         }
     });
 
-    $('html').on('keyup', function (event) {
+    $('html').on('keyup', function (event: any) {
         if (event.which == 8) { inputCharacter('\b'); }
     });
 
-    $('#reset').on('click', function (event) {
+    $('#reset').on('click', function () {
         theComputer.cpu.reset();
     });
 
-    $.each(roms, function (key, value) {
+    $.each(roms, function (key: string, value: { img: string; name: string; }) {
         $('#rom-list')
             .append($(`<div class="carousel-item ${!key ? 'active' : null}"><img class="d-block w-100" src="${value.img}" alt="${value.name}"> </div>`));
     });
 
 
-    $('#load-rom').on('click', function (event) {
+    $('#load-rom').on('click', function () {
         let rom = roms[$('div.active').index()];
         theComputer.mmap.addROM(rom.name, rom.start, rom.size, rom.uri);
         theComputer.cpu.reset();
@@ -86,7 +86,7 @@ function setupInterface() {
         $('#ihexFileLable').html('Choose file');
     });
 
-    let file;
+    let file: File;
 
     $('#ihexFileInput').on('change', function () {
         let files = $('#ihexFileInput').prop('files');
@@ -126,13 +126,11 @@ function loadRomOnStartup() {
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-
-var theComputer;
-var screen;
+var theComputer: ZCore;
+var screen: Screen;
 
 function startUpEmulation() {
-    screen = new Screen(80, 37, "terminal")
+    screen = new Screen(80, 37, <HTMLCanvasElement>$("#terminal")[0])
     screen.clear();
     setInterval(() => screen.draw(), 32);
     theComputer = new ZCore(emuConfig);
