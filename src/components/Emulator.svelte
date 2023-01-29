@@ -29,9 +29,10 @@
 		loadIhex(file: Blob) {
 			let fr = new FileReader();
 			fr.onload = function () {
-				//theComputer.cpu.reset();
 				setTimeout(() => {
-					theComputer.addToKeyboardBuffer(fr.result as string | ArrayBuffer);
+					theComputer.addToKeyboardBuffer(
+						fr.result?.toString().replaceAll(String.fromCharCode(10), '\r') as string | ArrayBuffer
+					);
 				}, 50);
 			};
 			fr.readAsText(file);
@@ -91,7 +92,7 @@
 
 		//Get Rom from hash
 		var romName = window.location.hash.substr(1);
-        console.log(romName)
+		console.log(romName);
 		let rom = roms.find((rom) => romName.toLocaleLowerCase() == rom.name.toLocaleLowerCase());
 		if (rom) {
 			emulator.loadRom(rom);
