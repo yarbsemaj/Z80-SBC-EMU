@@ -5,6 +5,7 @@
 	import minesweper from '../../../roms/minesweeper.cim';
 	import puc from '../../../roms/puc.cim';
 	import snake from '../../../roms/snake.cim';
+	import image from '../../../roms/image.cim';
 	const dispatch = createEventDispatcher();
 
 	function loadRom(uri: string) {
@@ -25,6 +26,10 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div on:click={() => loadRom(snake)}>
 			<Rom name="Snake" image="/img/games/snake.png" />
+		</div>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div on:click={() => loadRom(image)}>
+			<Rom name="Image" image="/img/games/image.png" />
 		</div>
 	</div>
 </div>
