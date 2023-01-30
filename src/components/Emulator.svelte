@@ -9,6 +9,7 @@
 	import puc from '../roms/puc.cim';
 	import minesweper from '../roms/minesweeper.cim';
 	import snake from '../roms/snake.cim';
+	import image from '../roms/image.cim';
 
 	var theComputer: ZCore;
 	var screen: Screen;
@@ -72,7 +73,8 @@
 	let roms = [
 		{ name: 'PUC', start: 0x9000, size: 0x3000, uri: puc },
 		{ name: 'Minesweeper', start: 0x9000, size: 0x3000, uri: minesweper },
-		{ name: 'Snake', start: 0x9000, size: 0x3000, uri: snake }
+		{ name: 'Snake', start: 0x9000, size: 0x3000, uri: snake },
+		{ name: 'Image', start: 0x9000, size: 0x3000, uri: image }
 	];
 
 	onMount(async () => {
