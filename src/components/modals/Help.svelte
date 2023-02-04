@@ -7,7 +7,7 @@
 		commands can be used. <br /> <br />
 		R nn Dumps out <code>0xFF</code> bites of memory starting at address
 		<code>0xnn00</code>.<br />
-		W nnnn xx Write byte <code>xx</code> to address <code>0xnnnn</code>.<br />
+		W nnnn Write byte starting at <code>0xnnnn</code> until a break is sent.<br />
 		E nnnn Runs a program starting at address <code>0xnnnn</code>.<br />
 	</p>
 
@@ -15,7 +15,6 @@
     <p>
 		Basic is in memory at address <code>0x0100</code>, typing E 0100 in the monitor will
 		start it.<br />
-		Hit enter when you see <code>Memory Top?</code>
     </p>  
 	<b>Load Roms</b>
 	<p>
