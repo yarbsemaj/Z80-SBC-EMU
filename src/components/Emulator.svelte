@@ -10,6 +10,7 @@
 	import minesweper from '../roms/minesweeper.cim';
 	import snake from '../roms/snake.cim';
 	import image from '../roms/image.cim';
+	import banner from '../roms/banner.cim';
 
 	var theComputer: ZCore;
 	var screen: Screen;
@@ -74,14 +75,15 @@
 		{ name: 'PUC', start: 0x9000, size: 0x3000, uri: puc },
 		{ name: 'Minesweeper', start: 0x9000, size: 0x3000, uri: minesweper },
 		{ name: 'Snake', start: 0x9000, size: 0x3000, uri: snake },
-		{ name: 'Image', start: 0x9000, size: 0x3000, uri: image }
+		{ name: 'Image', start: 0x9000, size: 0x3000, uri: image },
+		{ name: 'Banner', start: 0x9000, size: 0x3000, uri: banner }
 	];
 
 	onMount(async () => {
 		screen = new Screen(80, 37, canvas);
 		var emuConfig = {
-			updateInterval: 0.1, // ms tick interval
-			numCyclesPerTick: 30000, // clock cycles per interval
+			updateInterval: 1, // ms tick interval
+			numCyclesPerTick: 7372 * 3.5, // clock cycles per interval we have to multiply this by 3.5 to match speed for some reason
 			peripherals: {
 				ROM: [{ name: '8k ROM 0', start: 0x0000, size: 0x2000, uri: root }]
 			},
@@ -94,7 +96,6 @@
 
 		//Get Rom from hash
 		var romName = window.location.hash.substr(1);
-		console.log(romName);
 		let rom = roms.find((rom) => romName.toLocaleLowerCase() == rom.name.toLocaleLowerCase());
 		if (rom) {
 			emulator.loadRom(rom);

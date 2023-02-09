@@ -6,6 +6,8 @@
 	import puc from '../../../roms/puc.cim';
 	import snake from '../../../roms/snake.cim';
 	import image from '../../../roms/image.cim';
+	import banner from '../../../roms/banner.cim';
+
 	const dispatch = createEventDispatcher();
 
 	function loadRom(uri: string) {
@@ -30,6 +32,10 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div on:click={() => loadRom(image)}>
 			<Rom name="Image" image="/img/games/image.png" />
+		</div>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div on:click={() => loadRom(banner)}>
+			<Rom name="Banner" image="/img/games/banner.png" />
 		</div>
 	</div>
 </div>
