@@ -1,4 +1,4 @@
-import Z80 from './Z80'
+import { Z80 } from 'z80-emulator'
 import { MemoryMap } from './Memory'
 
 interface ZCoreSettings {
@@ -8,10 +8,10 @@ interface ZCoreSettings {
     numCyclesPerTick: number
 }
 
-export interface ROM { 
-    name: string; 
-    start: number; 
-    size: number; 
+export interface ROM {
+    name: string;
+    start: number;
+    size: number;
     uri: any;
 }
 
@@ -23,7 +23,7 @@ export class ZCore {
     bufferTickCountdown: number
     lastReadAddress: number
     lastWriteAddress: number
-    cpu: any
+    cpu: Z80
     interval!: NodeJS.Timeout;
 
     constructor(emuConfig: ZCoreSettings) {
@@ -43,7 +43,7 @@ export class ZCore {
         this.lastWriteAddress = 0xFFFF;
 
         // initialize the Z80 core
-        this.cpu = Z80(this);
+        this.cpu = new Z80(this);
 
         this.cpu.reset();
 
@@ -58,12 +58,17 @@ export class ZCore {
         }
     }
 
-    mem_read(address: number) {
+    readMemory(address: number) {
         this.lastReadAddress = address;
         return (this.mmap.read(address));
     }
 
-    mem_write(address: number, value: number) {
+    tStateCount = 0
+    contendMemory() { }
+    contendPort() { }
+
+
+    writeMemory(address: number, value: number) {
         this.lastWriteAddress = address;
         this.mmap.write(address, value);
     }
@@ -74,10 +79,10 @@ export class ZCore {
 
     pollKeybuffer() {
         if (this.inbuf.length == 0) { return; }
-        this.cpu.interrupt(false, this.inbuf.charCodeAt(0));
+        this.cpu.maskableInterrupt();
     }
 
-    io_read(port: number) {
+    readPort(port: number) {
         var retval = 0x00;
 
         port = port & 0x00FF;
@@ -101,12 +106,8 @@ export class ZCore {
         return retval;
     }
 
-    io_write(port: number, value: number) {
+    writePort(port: number, value: number) {
         port = port & 0x00FF;
-
-        if (port == 0x80) { /* ACIA control */
-            // ignore all.
-        }
         if (port == 0x81) { /* ACIA data (send chars to console) */
             this.emuConfig.sendOutput(String.fromCharCode(value));
         }
@@ -119,16 +120,25 @@ export class ZCore {
         this.pollKeybuffer();
 
         // run some instructions
-        while (count < this.emuConfig.numCyclesPerTick) {
-            count += this.cpu.run_instruction();
+        while (this.tStateCount < this.emuConfig.numCyclesPerTick) {
+            if(this.cpu.regs.pc == 0x9000){
+                window.showPC = true
+            }
+            if (window.showPC == true) {
+                console.log(this.cpu.regs.sp.toString(16))
+                if(this.cpu.regs.pc > 0x0090 && this.cpu.regs.pc < 0x8000){
+                    window.showPC = false
+                }
+            }
+            this.cpu.step();
         }
+        this.cpu.hal.tStateCount = 0
     }
 
     go() {
         // stop them just in case
         clearInterval(this.interval);
-        clearInterval(this.animationInterval);
-        
+
         var self = this;
         this.interval = setInterval(function () {
             self.tick();

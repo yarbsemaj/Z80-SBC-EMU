@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { ROM } from '../../../emu/component/ZCore';
 	import Rom from './Rom.svelte';
 	import minesweper from '../../../roms/minesweeper.cim';
 	import puc from '../../../roms/puc.cim';
 	import snake from '../../../roms/snake.cim';
 	import image from '../../../roms/image.cim';
 	import banner from '../../../roms/banner.cim';
+	import connect4 from '../../../roms/connect4.cim';
 
 	const dispatch = createEventDispatcher();
 
@@ -36,6 +36,10 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div on:click={() => loadRom(banner)}>
 			<Rom name="Banner" image="/img/games/banner.png" />
+		</div>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div on:click={() => loadRom(connect4)}>
+			<Rom name="Connect 4" image="/img/games/connect4.png" />
 		</div>
 	</div>
 </div>

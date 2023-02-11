@@ -35,6 +35,10 @@ export class MemoryMap{
     }
 
     write(addr: number, value: number) {
+        if(addr < 0x8000){
+            console.log(`NO RAM at address ${addr.toString(16)}`)
+            return;
+        }
         this.mem[addr] = value & 0x00FF;
     }
 }
