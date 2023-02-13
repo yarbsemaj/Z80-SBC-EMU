@@ -4,6 +4,9 @@ An emulator for my Z80 Based Single board computer, based on [Grant Searle's des
 
 ![image](https://user-images.githubusercontent.com/17494632/218585211-28aac93c-a5ef-4749-bcc4-afb2ef353b0d.png)
 
+## Try it out
+https://z80.yarbsemaj.com/
+
 ## My other projects that use this emulator
 https://github.com/yarbsemaj/Z80-Snake
 
