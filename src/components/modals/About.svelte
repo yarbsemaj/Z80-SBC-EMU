@@ -7,11 +7,13 @@
 		Pacman <a href="https://github.com/yarbsemaj/z80-Pacman">Github</a><br />
 		Snake <a href="https://github.com/yarbsemaj/Z80-Snake">Github</a><br />
 		Minesweeper <a href="https://github.com/yarbsemaj/Z80-MineSweeper">Github</a><br />
+		Banner <a href="https://github.com/yarbsemaj/yarbsemaj">Github</a><br />
+		Image <a href="https://github.com/yarbsemaj/Z80-Image-Viewer">Github</a><br />
+		Connect 4 <a href="https://github.com/yarbsemaj/Z80-Connect-4">Github</a><br />
 	</p>
 	<b>Acknowledgements</b>
 	<p>
 		EMU Forked from <a href="http://umlautllama.com/projects/rc2014/">here</a>
 		<br />
-		Z80 Core <a href="https://github.com/DrGoldfire/Z80.js">Github</a>
 	</p>
 </div>

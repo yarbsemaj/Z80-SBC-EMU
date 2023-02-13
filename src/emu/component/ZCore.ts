@@ -121,15 +121,6 @@ export class ZCore {
 
         // run some instructions
         while (this.tStateCount < this.emuConfig.numCyclesPerTick) {
-            if(this.cpu.regs.pc == 0x9000){
-                window.showPC = true
-            }
-            if (window.showPC == true) {
-                console.log(this.cpu.regs.sp.toString(16))
-                if(this.cpu.regs.pc > 0x0090 && this.cpu.regs.pc < 0x8000){
-                    window.showPC = false
-                }
-            }
             this.cpu.step();
         }
         this.cpu.hal.tStateCount = 0
