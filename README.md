@@ -18,6 +18,6 @@ https://github.com/yarbsemaj/Z80-Monitor
 
 https://github.com/yarbsemaj/Z80-Image-Viewer
 
-https://github.com/yarbsemaj/Z80-Image-Viewer
+https://github.com/yarbsemaj/Z80-Game-Of-Life
 
 https://github.com/yarbsemaj/yarbsemaj

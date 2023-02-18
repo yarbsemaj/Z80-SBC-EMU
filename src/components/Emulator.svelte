@@ -12,6 +12,8 @@
 	import image from '../roms/image.cim';
 	import banner from '../roms/banner.cim';
 	import connect4 from '../roms/connect4.cim';
+	import life from '../roms/life.cim';
+
 
 	var theComputer: ZCore;
 	var screen: Screen;
@@ -78,7 +80,8 @@
 		{ name: 'Snake', start: 0x9000, size: 0x3000, uri: snake },
 		{ name: 'Image', start: 0x9000, size: 0x3000, uri: image },
 		{ name: 'Banner', start: 0x9000, size: 0x3000, uri: banner },
-		{ name: 'Connect4', start: 0x9000, size: 0x3000, uri: connect4 }
+		{ name: 'Connect4', start: 0x9000, size: 0x3000, uri: connect4 },
+		{ name: 'Life', start: 0x9000, size: 0x3000, uri: life }
 	];
 
 	onMount(async () => {

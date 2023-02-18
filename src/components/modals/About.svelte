@@ -10,6 +10,7 @@
 		Banner <a href="https://github.com/yarbsemaj/yarbsemaj">Github</a><br />
 		Image <a href="https://github.com/yarbsemaj/Z80-Image-Viewer">Github</a><br />
 		Connect 4 <a href="https://github.com/yarbsemaj/Z80-Connect-4">Github</a><br />
+		Life <a href="https://github.com/yarbsemaj/Z80-Game-Of-Life">Github</a><br />
 	</p>
 	<b>Acknowledgements</b>
 	<p>
