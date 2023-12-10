@@ -12,7 +12,7 @@
 	const dispatch = createEventDispatcher();
 
 	function loadRom(uri: string) {
-		dispatch('loadrom', { start: 0x9000, size: 0x3000, uri });
+		dispatch('loadrom', { start: 0x9000,  uri });
 	}
 </script>
 

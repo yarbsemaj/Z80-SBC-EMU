@@ -1,33 +1,24 @@
 
 export class MemoryMap{
-    memsize: number
-    memorybuffer: ArrayBuffer
     mem: Uint8Array
 
     constructor(size: number){
-        this.memsize = size;
-        this.memorybuffer = new ArrayBuffer(this.memsize);
-        this.mem = new Uint8Array(this.memorybuffer);
+        this.mem = new Uint8Array(size);
     }
 
-    loadBinaryResource(url: string){
-        var byteArray = [];
-        var req = new XMLHttpRequest();
-        req.open('GET', url, false);
-        req.overrideMimeType('text\/plain; charset=x-user-defined');
-        req.send(null);
-        if (req.status != 200) return byteArray;
-        for (var i = 0; i < req.responseText.length; ++i) {
-            byteArray.push(req.responseText.charCodeAt(i) & 0xff)
-        }
-        return byteArray;
+    async loadBinaryResource(url: string){
+        let req = await fetch(url);
+        if (req.status != 200) return [];
+
+        return  new Uint8Array (await req.arrayBuffer());
     }
 
-    addROM(name: any, addr: number, size: number, url: string) {
-        var loadedRom = this.loadBinaryResource(url);
-        for (var i = 0; i < size; i++) {
-            this.mem[i + addr] = loadedRom[i];
-        }
+    async addROM(addr: number, url: string) {
+        await this.loadBinaryResource(url).then((loadedRom)=>{
+            for (let i = 0; i < loadedRom.length; i++) {
+                this.mem[i + addr] = loadedRom[i];
+            }
+        });
     }
 
     read(addr: number) {

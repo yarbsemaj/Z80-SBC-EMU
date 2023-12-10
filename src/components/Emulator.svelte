@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	import { Screen } from '../emu/component/Screen';
-	import { ZCore, type ROM } from '../emu/component/ZCore';
+	import { HAL, type ROM } from '../emu/component/HAL';
 
 	import root from '../roms/root.cim';
 
@@ -15,7 +15,7 @@
 	import life from '../roms/life.cim';
 
 
-	var theComputer: ZCore;
+	var theComputer: HAL;
 	var screen: Screen;
 	let canvas: HTMLCanvasElement;
 
@@ -23,8 +23,8 @@
 		reset() {
 			theComputer.cpu.reset();
 		},
-		loadRom(rom: ROM) {
-			theComputer.mmap.addROM(rom.name, rom.start, rom.size, rom.uri);
+		async loadRom(rom: ROM) {
+			await theComputer.memory.addROM(rom.start,rom.uri);
 			theComputer.cpu.reset();
 			//Give time for the CPU to reset
 			setTimeout(() => {
@@ -36,7 +36,7 @@
 			fr.onload = function () {
 				setTimeout(() => {
 					theComputer.addToKeyboardBuffer(
-						fr.result?.toString().replaceAll(String.fromCharCode(10), '\r') as string | ArrayBuffer
+						fr.result?.toString().replaceAll(String.fromCharCode(10), '\r') as string
 					);
 				}, 50);
 			};
@@ -75,13 +75,13 @@
 	}
 
 	let roms = [
-		{ name: 'PUC', start: 0x9000, size: 0x3000, uri: puc },
-		{ name: 'Minesweeper', start: 0x9000, size: 0x3000, uri: minesweper },
-		{ name: 'Snake', start: 0x9000, size: 0x3000, uri: snake },
-		{ name: 'Image', start: 0x9000, size: 0x3000, uri: image },
-		{ name: 'Banner', start: 0x9000, size: 0x3000, uri: banner },
-		{ name: 'Connect4', start: 0x9000, size: 0x3000, uri: connect4 },
-		{ name: 'Life', start: 0x9000, size: 0x3000, uri: life }
+		{ name: 'PUC', start: 0x9000,  uri: puc },
+		{ name: 'Minesweeper', start: 0x9000,  uri: minesweper },
+		{ name: 'Snake', start: 0x9000,  uri: snake },
+		{ name: 'Image', start: 0x9000,  uri: image },
+		{ name: 'Banner', start: 0x9000,  uri: banner },
+		{ name: 'Connect4', start: 0x9000,  uri: connect4 },
+		{ name: 'Life', start: 0x9000,  uri: life }
 	];
 
 	onMount(async () => {
@@ -89,15 +89,17 @@
 		var emuConfig = {
 			updateInterval: 1, // ms tick interval
 			numCyclesPerTick: 7372 * 3.5, // clock cycles per interval we have to multiply this by 3.5 to match speed for some reason
-			peripherals: {
-				ROM: [{ name: '8k ROM 0', start: 0x0000, size: 0x2000, uri: root }]
-			},
+			roms: [{ name: '8k ROM 0', start: 0x0000, uri: root }],
 			sendOutput: (text: string) => screen.newChar(text)
 		};
 
 		screen.clear();
 		setInterval(() => screen.draw(), 32);
-		theComputer = new ZCore(emuConfig);
+		theComputer = new HAL(emuConfig);
+
+        await theComputer.setupMemory(emuConfig.roms)
+		theComputer.cpu.reset();
+		theComputer.go();
 
 		//Get Rom from hash
 		var romName = window.location.hash.substr(1);
