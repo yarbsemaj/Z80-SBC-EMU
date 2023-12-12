@@ -2,7 +2,6 @@ import { Z80 } from 'z80-emulator'
 import { MemoryMap } from './Memory'
 
 interface EMUSettings {
-    roms: ROM[];
     sendOutput: (txt: string) => void;
     updateInterval: number
     numCyclesPerTick: number
@@ -28,10 +27,8 @@ export class HAL {
         this.cpu = new Z80(this);
     }
 
-    async setupMemory() {
-        for (let rom of this.emuConfig.roms) {
-            await this.memory.addROM(rom.start, rom.uri);
-        }
+    async setupMemory(rom: ROM) {
+        await this.memory.addROM(rom.start, rom.uri);
     }
 
     readMemory(address: number) {

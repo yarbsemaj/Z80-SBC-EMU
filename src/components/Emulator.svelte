@@ -2,7 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 
 	import { Screen } from '../emu/component/Screen';
-	import { HAL, type ROM } from '../emu/component/HAL';
+		import type { ROM } from '../emu/component/HAL';
 
 	import root from '../roms/root.cim';
 
@@ -121,7 +121,7 @@
 
 		screen.clear();
 		loop = setInterval(() => screen.draw(), 32);
-		worker.postMessage({ action: RXType.INIT });
+		worker.postMessage({ action: RXType.INIT, data: { name: 'Base', start: 0x0000, uri: root } });
 	});
 </script>
 

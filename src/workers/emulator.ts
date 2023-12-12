@@ -1,5 +1,4 @@
 import { HAL, type ROM } from '../emu/component/HAL';
-import root from '../roms/root.cim';
 
 export enum TXType {
     INIT,
@@ -18,6 +17,7 @@ export type RXMessage = RX_INIT | RX_RESET | RX_LOAD_ROM | RX_SEND_CHAR
 
 type RX_INIT = {
     action: RXType.INIT,
+    data: ROM
 }
 
 type RX_RESET = {
@@ -55,7 +55,6 @@ if (typeof self !== 'undefined') {
     let emuConfig = {
         updateInterval: 1, // ms tick interval
         numCyclesPerTick: 7372 * 3.5, // clock cycles per interval we have to multiply this by 3.5 to match speed for some reason
-        roms: [{ name: '8k ROM 0', start: 0x0000, uri: root }],
         sendOutput: (char: string) => { self.postMessage({ action: TXType.OUTPUT_CHAR, data: char }) }
     };
 
@@ -65,7 +64,7 @@ if (typeof self !== 'undefined') {
     self.onmessage = async (e: MessageEvent<RXMessage>) => {
         switch (e.data.action) {
             case RXType.INIT:
-                await theComputer.setupMemory();
+                await theComputer.setupMemory(e.data.data);
                 theComputer.cpu.reset();
                 theComputer.go();
                 self.postMessage({ action: TXType.INIT });
