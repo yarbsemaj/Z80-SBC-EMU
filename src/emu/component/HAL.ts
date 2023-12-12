@@ -2,7 +2,6 @@ import { Z80 } from 'z80-emulator'
 import { MemoryMap } from './Memory'
 
 interface EMUSettings {
-    roms: ROM[];
     sendOutput: (txt: string) => void;
     updateInterval: number
     numCyclesPerTick: number
@@ -24,20 +23,16 @@ export class HAL {
     constructor(emuConfig: EMUSettings) {
         this.emuConfig = emuConfig;
         this.memory = new MemoryMap(0xFFFF);
-
-
         this.inputBuffer = [];
         this.cpu = new Z80(this);
     }
 
-    async setupMemory(data: ROM[]) {
-        for (let rom of data) {
-            await this.memory.addROM(rom.start, rom.uri);
-        }
+    async setupMemory(rom: ROM) {
+        await this.memory.addROM(rom.start, rom.uri);
     }
 
     readMemory(address: number) {
-        return (this.memory.read(address));
+        return this.memory.read(address);
     }
 
     tStateCount = 0
@@ -100,8 +95,8 @@ export class HAL {
     go() {
         clearInterval(this.interval);
 
-        var self = this;
-        this.interval = setInterval(function () {
+        let self = this;
+        this.interval = setInterval(() => {
             self.tick();
         }, this.emuConfig.updateInterval);
     }

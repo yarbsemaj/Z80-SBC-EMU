@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	import { Screen } from '../emu/component/Screen';
-	import { HAL, type ROM } from '../emu/component/HAL';
+		import type { ROM } from '../emu/component/HAL';
 
 	import root from '../roms/root.cim';
 
@@ -13,29 +13,27 @@
 	import banner from '../roms/banner.cim';
 	import connect4 from '../roms/connect4.cim';
 	import life from '../roms/life.cim';
+	import threed from '../roms/threed.cim';
+	import { RXType, TXType, type TXMessage } from '../workers/emulator';
+	import EmulatorWorker from '../workers/emulator?worker';
+	let loop: NodeJS.Timer;
 
-
-	var theComputer: HAL;
-	var screen: Screen;
+	let screen: Screen;
 	let canvas: HTMLCanvasElement;
+	let worker: Worker;
 
 	export const emulator = {
 		reset() {
-			theComputer.cpu.reset();
+			worker.postMessage({ action: RXType.RESET });
 		},
-		async loadRom(rom: ROM) {
-			await theComputer.memory.addROM(rom.start,rom.uri);
-			theComputer.cpu.reset();
-			//Give time for the CPU to reset
-			setTimeout(() => {
-				theComputer.addToKeyboardBuffer('E9000\n');
-			}, 50);
+		loadRom(rom: ROM) {
+			worker.postMessage({ action: RXType.LOAD_ROM, data: rom });
 		},
 		loadIhex(file: Blob) {
 			let fr = new FileReader();
 			fr.onload = function () {
 				setTimeout(() => {
-					theComputer.addToKeyboardBuffer(
+					addToKeyboardBuffer(
 						fr.result?.toString().replaceAll(String.fromCharCode(10), '\r') as string
 					);
 				}, 50);
@@ -45,10 +43,13 @@
 	};
 
 	function inputCharacter(character: string) {
-		theComputer.addToKeyboardBuffer(character);
+		addToKeyboardBuffer(character);
 		if (character.charCodeAt(0) == 10) {
-			theComputer.addToKeyboardBuffer('\r');
+			addToKeyboardBuffer('\r');
 		}
+	}
+	function addToKeyboardBuffer(char: string) {
+		worker.postMessage({ action: RXType.SEND_CHAR, data: char });
 	}
 	function onkeypress(event: KeyboardEvent) {
 		if (event.which == 9 || event.which == 13 || event.which == 16) {
@@ -58,7 +59,7 @@
 				inputCharacter('\n');
 			}
 		} else {
-			var key = String.fromCharCode(event.which);
+			let key = String.fromCharCode(event.which);
 			inputCharacter(key);
 		}
 	}
@@ -75,38 +76,52 @@
 	}
 
 	let roms = [
-		{ name: 'PUC', start: 0x9000,  uri: puc },
-		{ name: 'Minesweeper', start: 0x9000,  uri: minesweper },
-		{ name: 'Snake', start: 0x9000,  uri: snake },
-		{ name: 'Image', start: 0x9000,  uri: image },
-		{ name: 'Banner', start: 0x9000,  uri: banner },
-		{ name: 'Connect4', start: 0x9000,  uri: connect4 },
-		{ name: 'Life', start: 0x9000,  uri: life }
+		{ name: 'PUC', start: 0x9000, uri: puc },
+		{ name: 'Minesweeper', start: 0x9000, uri: minesweper },
+		{ name: 'Snake', start: 0x9000, uri: snake },
+		{ name: 'Image', start: 0x9000, uri: image },
+		{ name: 'Banner', start: 0x9000, uri: banner },
+		{ name: 'Connect4', start: 0x9000, uri: connect4 },
+		{ name: 'Life', start: 0x9000, uri: life },
+		{ name: 'threed', start: 0x9000, uri: threed }
 	];
+
+	onDestroy(() => {
+		clearInterval(loop);
+		worker?.terminate();
+	});
 
 	onMount(async () => {
 		screen = new Screen(80, 37, canvas);
-		var emuConfig = {
-			updateInterval: 1, // ms tick interval
-			numCyclesPerTick: 7372 * 3.5, // clock cycles per interval we have to multiply this by 3.5 to match speed for some reason
-			roms: [{ name: '8k ROM 0', start: 0x0000, uri: root }],
-			sendOutput: (text: string) => screen.newChar(text)
+
+		worker = new EmulatorWorker();
+		worker.onmessage = async (e: MessageEvent<TXMessage>) => {
+			switch (e.data.action) {
+				case TXType.OUTPUT_CHAR:
+					screen.newChar(e.data.data);
+					break;
+				case TXType.INIT:
+					screen.clear();
+					//Get Rom from hash
+					let romName = window.location.hash.substr(1);
+					let rom = roms.find((rom) => romName.toLocaleLowerCase() == rom.name.toLocaleLowerCase());
+					if (rom) {
+						emulator.loadRom(rom);
+					}
+					break;
+				case TXType.ROM_LOADED:
+					//Give time for the CPU to reset
+					emulator.reset();
+					screen.clear();
+					setTimeout(() => {
+						addToKeyboardBuffer('E9000\n');
+					}, 50);
+			}
 		};
 
 		screen.clear();
-		setInterval(() => screen.draw(), 32);
-		theComputer = new HAL(emuConfig);
-
-        await theComputer.setupMemory(emuConfig.roms)
-		theComputer.cpu.reset();
-		theComputer.go();
-
-		//Get Rom from hash
-		var romName = window.location.hash.substr(1);
-		let rom = roms.find((rom) => romName.toLocaleLowerCase() == rom.name.toLocaleLowerCase());
-		if (rom) {
-			emulator.loadRom(rom);
-		}
+		loop = setInterval(() => screen.draw(), 32);
+		worker.postMessage({ action: RXType.INIT, data: { name: 'Base', start: 0x0000, uri: root } });
 	});
 </script>
 
