@@ -50,9 +50,9 @@ export class Screen {
     showCursor: boolean
 
     constructor(width: number, height: number, element: HTMLCanvasElement) {
-        var scale = window.devicePixelRatio;
+        let scale = window.devicePixelRatio;
         this.canvasElement = element;
-        var ctx = this.canvasElement.getContext("2d") as CanvasRenderingContext2D;
+        let ctx = this.canvasElement.getContext("2d") as CanvasRenderingContext2D;
         this.canvasElement.style.width = 800 + "px";
         this.canvasElement.style.height = 600 + "px";
         this.canvasElement.width = Math.floor(800 * scale);
@@ -184,16 +184,16 @@ export class Screen {
         this.canvas.font = "16px Windows Command Prompt, monospace";
         let now = new Date();
         //First draw the background, we have to spit this out so we dont get overdraw
-        for (var row = 0; row < this.height; row++) {
-            for (var col = 0; col < this.width; col++) {
+        for (let row = 0; row < this.height; row++) {
+            for (let col = 0; col < this.width; col++) {
                 let char = this.screenBuffer[row][col] ||  Screen.defaultChar;
                 this.canvas.fillStyle = char.colour.bg
                 this.canvas.fillRect((col + 1) * 10 - 10, row * 16, 10, 16);
             }
         }
         //Now the foreground and cursor
-        for (var row = 0; row < this.height; row++) {
-            for (var col = 0; col < this.width; col++) {
+        for (let row = 0; row < this.height; row++) {
+            for (let col = 0; col < this.width; col++) {
                 let char = this.screenBuffer[row][col] ||  Screen.defaultChar;
                 this.canvas.fillStyle = char.colour.fg
                 if (this.cursor.y == row && this.cursor.x == col && this.showCursor && Math.round(now.getTime() / 1000) % 2) {

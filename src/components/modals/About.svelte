@@ -14,7 +14,7 @@
 	</p>
 	<b>Acknowledgements</b>
 	<p>
-		Inspired by <a href="http://umlautllama.com/projects/rc2014/">here</a>
+		Inspired by <a href="http://umlautllama.com/projects/rc2014/">umlautllama.com</a>
 		<br />
 	</p>
 </div>

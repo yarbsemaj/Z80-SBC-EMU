@@ -8,6 +8,7 @@
 	import banner from '../../../roms/banner.cim';
 	import connect4 from '../../../roms/connect4.cim';
 	import life from '../../../roms/life.cim';
+	import threed from '../../../roms/threed.cim';
 
 	const dispatch = createEventDispatcher();
 
@@ -45,6 +46,10 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div on:click={() => loadRom(life)}>
 			<Rom name="Life" image="/img/games/life.png" />
+		</div>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div on:click={() => loadRom(threed)}>
+			<Rom name="ThreeD" image="/img/games/die.png" />
 		</div>
 	</div>
 </div>
