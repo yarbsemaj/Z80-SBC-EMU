@@ -7,13 +7,14 @@
 	import image from '../../../roms/image.cim';
 	import banner from '../../../roms/banner.cim';
 	import connect4 from '../../../roms/connect4.cim';
+	import paint from '../../../roms/paint.cim';
 	import life from '../../../roms/life.cim';
 	import threed from '../../../roms/threed.cim';
 
 	const dispatch = createEventDispatcher();
 
 	function loadRom(uri: string) {
-		dispatch('loadrom', { start: 0x9000,  uri });
+		dispatch('loadrom', { start: 0x9000, uri });
 	}
 </script>
 
@@ -34,6 +35,10 @@
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div on:click={() => loadRom(image)}>
 			<Rom name="Image" image="/img/games/image.png" />
+		</div>
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div on:click={() => loadRom(paint)}>
+			<Rom name="zPaint" image="/img/games/zPaint.png" />
 		</div>
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div on:click={() => loadRom(banner)}>

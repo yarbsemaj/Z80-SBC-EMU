@@ -197,11 +197,11 @@ export class Screen {
                 let char = this.screenBuffer[row][col] ||  Screen.defaultChar;
                 this.canvas.fillStyle = char.colour.fg
                 if (this.cursor.y == row && this.cursor.x == col && this.showCursor && Math.round(now.getTime() / 1000) % 2) {
-                    this.canvas.fillRect((col + 1) * 10 - 10, row * 16 + 4, 10, 16);
+                    this.canvas.fillRect((col + 1) * 10 - 10, row * 16, 10, 16);
                 }
                 if (char.txt) {
                     this.canvas.fillStyle = char.colour.fg
-                    this.canvas.fillText(char.txt, col * 10, (row + 1) * 16);
+                    this.canvas.fillText(char.txt, col * 10 + 1, ((row + 1) * 16 - 3));
                 }
             }
         }
