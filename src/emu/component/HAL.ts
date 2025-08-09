@@ -22,7 +22,7 @@ export class HAL {
 
     constructor(emuConfig: EMUSettings) {
         this.emuConfig = emuConfig;
-        this.memory = new MemoryMap(0xFFFF);
+        this.memory = new MemoryMap(0xFFFF +1); // 64KB memory
         this.inputBuffer = [];
         this.cpu = new Z80(this);
     }

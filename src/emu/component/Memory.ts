@@ -30,6 +30,8 @@ export class MemoryMap{
             console.log(`NO RAM at address ${addr.toString(16)}`)
             return;
         }
-        this.mem[addr] = value & 0x00FF;
+
+        value = value & 0x00FF; //Mask the value to 8 bits
+        this.mem[addr] = value;
     }
 }
